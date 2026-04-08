@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>飲食クライアント向けfreee×KPIモニタリングパッケージ（会計事務所向け）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="飲食店クライアントからデータを預かり、会計事務所側でモニタリングしやすくするためのfreee×KPIダッシュボード活用パッケージ（会計事務所向け）のご案内。">
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --border: #e0ddd5;
+      --text: #222222;
+      --muted: #666666;
+      --accent: #01696f;
+      --accent-soft: #e0f1f2;
+      --danger: #a13544;
+      --radius: 10px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.06);
+      --space: 20px;
+      --max-width: 900px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .page {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 16px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0 16px;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .tagline {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .ghost-btn {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      font-size: 13px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .hero {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .hero-lead {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .hero-ctas {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-primary, .btn-secondary {
+      border-radius: 999px;
+      border: none;
+      padding: 11px 18px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-secondary {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+    .hero-note {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .hero-mock {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 14px;
+      background: #faf9f7;
+      font-size: 12px;
+    }
+    .hero-mock-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .kpi-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      border-bottom: 1px dashed #e4e1da;
+    }
+    .kpi-row:last-child { border-bottom: none; }
+    section {
+      margin-bottom: 32px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    section h2 {
+      font-size: 18px;
+      margin: 0 0 12px;
+    }
+    section p {
+      font-size: 14px;
+      margin: 0 0 10px;
+    }
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .checklist li {
+      font-size: 14px;
+      padding-left: 1.4em;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .checklist li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+    .box-muted {
+      border-radius: var(--radius);
+      border: 1px dashed var(--border);
+      background: #faf9f6;
+      padding: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f0ece5;
+      font-weight: 600;
+    }
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .pill {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #faf97;
+    }
+    .cta-block {
+      text-align: center;
+    }
+    .cta-block p { margin-bottom: 16px; }
+    .faq-item {
+      margin-bottom: 16px;
+    }
+    .faq-q {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .closing {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 24px 0 12px;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div>
+      <div class="logo">飲食クライアント×freee KPIモニタリングパッケージ</div>
+      <div class="tagline">レシートはLINE、会計はfreee、設計と運用は会計事務所。</div>
+    </div>
+    <button class="ghost-btn" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">
+      パッケージの内容を見る
+    </button>
+  </header>
+
+  <main>
+
+    <!-- ヒーロー -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1 class="hero-title">
+            飲食クライアントから数字を預かり、事務所側でモニタリングしやすくなる仕組みを。
+          </h1>
+          <p class="hero-lead">
+            飲食クライアントに「もっと数字を見ましょう」と伝えても、現場は忙しく、なかなか動いてもらえない。一方で、月次や決算だけを淡々とこなすだけでは、顧問料のアップや差別化につながりにくい——そんな事務所向けのパッケージです。
+          </p>
+          <p class="hero-lead">
+            この仕組みは「顧問先オーナーが自分で触る仕組み」ではなく、<strong>オーナーからデータを預かり、事務所側がモニタリングしやすくなる仕組み</strong>として設計しています。オーナー側の作業は「LINEでレシートを投げる」「freeeは入っているだけ」で完結させ、その先の設計・運用は事務所＋外部パートナーが持つ前提です。
+          </p>
+          <div class="hero-ctas">
+            <button class="btn-primary">
+              飲食向けモニタリングパッケージの概要PDFを受け取る
+            </button>
+            <button class="btn-secondary">
+              オンラインでの個別相談（30分）の候補日を送ってもらう
+            </button>
+          </div>
+          <div class="hero-note">
+            ※実際の資料配布・相談受付の方法に合わせてボタンの遷移先は変更してください。
+          </div>
+        </div>
+        <div class="hero-mock">
+          <div class="hero-mock-title">事務所側のダッシュボードイメージ</div>
+          <div class="kpi-row">
+            <span>クライアントA 売上（今月）</span><span>¥ 5,230,000</span>
+          </div>
+          <div class="kpi-row">
+            <span>粗利率</span><span>57.8%</span>
+          </div>
+          <div class="kpi-row">
+            <span>原価率</span><span>31.5%（▲1.8pt）</span>
+          </div>
+          <div class="kpi-row">
+            <span>FL率</span><span>63.2%</span>
+          </div>
+          <div class="kpi-row">
+            <span>前月比</span><span>＋4.2%</span>
+          </div>
+          <p style="margin-top:10px;">
+            freeeから取り込んだデータをもとに、複数店舗の売上・粗利・原価率・FL率を一覧で確認し、危険な店舗に早めに目を付けられるイメージです。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 悩み -->
+    <section>
+      <h2>こんな飲食クライアントをお持ちの事務所へ</h2>
+      <ul class="checklist">
+        <li>売上はPOSやレジアプリで見ているが、粗利や原価率はオーナーの感覚頼みになっている。</li>
+        <li>紙の証憑を毎月まとめて郵送してもらい、月次を締めて終わりになりがちだ。</li>
+        <li>店舗が2〜3店に増えた顧問先について、「どの店が危ないか」を早めに把握したい。</li>
+        <li>freeeは導入しているが、「とりあえず入っているだけ」で、事務所も顧問先も十分に使い切れていない。</li>
+      </ul>
+    </section>
+
+    <!-- なぜオーナー任せだと止まるか -->
+    <section>
+      <h2>オーナーに「やってもらう前提」の仕組みは、どうしても止まりやすい</h2>
+      <div class="two-col">
+        <div>
+          <p>
+            現場オーナーに「freeeアプリで毎日入力してください」「ダッシュボードを自分で見てください」とお願いすると、最初は前向きでも、忙しい日が続くと止まりがちです。その結果、事務所が管理したい数字も揃わず、「やっぱり続かなかったね」で終わってしまいます。
+          </p>
+          <p>
+            そこで本パッケージでは、オーナー側の役割を<strong>「LINEにレシート・写真を送る」「必要最低限の確認に答える」</strong>までに絞り、その先の整理・freeeへの反映・KPIダッシュボードの更新・モニタリングは、事務所側が主導できる前提で設計します。
+          </p>
+        </div>
+        <div class="box-muted">
+          <p style="margin-top:0;">オーナーにお願いすること</p>
+          <ul class="checklist">
+            <li>レシートや請求書をスマホで撮って、指定のLINEに送る。</li>
+            <li>たまに届く確認メッセージに、チャットで回答する。</li>
+            <li>freeeはログインできる状態にしておく（操作は基本不要）。</li>
+          </ul>
+          <p>これ以上の作業は事務所側＋外部パートナーで持つ想定です。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 仕組みの全体像 -->
+    <section>
+      <h2>仕組みの全体像：レシート → LINE → freee → KPIダッシュボード</h2>
+      <p>事務所側で完結する“細いけれど切れないパイプ”をつくるイメージです。</p>
+      <ol class="checklist" style="list-style:none; padding-left:0;">
+        <li><strong>1. データの入口：LINEでレシート・請求書を受け取る</strong><br>
+          オーナーは、レシートや請求書をスマホで撮影して、指定のLINEアカウントに送るだけです。freee公式の「LINEレシート電子保存」を併用すれば、送られた画像はそのままfreee会計のファイルボックスに保存され、電子帳簿保存法のスキャナ保存要件を満たした形で保管できます。
+        </li>
+        <li><strong>2. 会計ソフト：freeeは「データを貯める箱」として使う</strong><br>
+          銀行・カード明細や決済サービスの連携を通じて、入出金データを自動で取り込みつつ、LINEで受け取った証憑をfreeeに集約します。freeeの詳細な操作は、事務所内もしくは外部パートナー側で担当します。
+        </li>
+        <li><strong>3. モニタリング：飲食専用KPIダッシュボードに自動反映</strong><br>
+          freee上のデータをもとに、売上・粗利率・原価率・FL率・店舗別比較などを見られるダッシュボードを用意します。事務所側がログインして複数店舗を横並びで確認し、「どの店が危ないか」を早めに把握するためのビューです。
+        </li>
+      </ol>
+      <div class="box-muted" style="margin-top:16px;">
+        紙の証憑を毎月まとめて郵送してもらっている顧問先については、これまで通り郵送を受けつつ、
+        高額な仕入れや投資的な支出、家賃など、早めに把握したい証憑だけをLINEで送ってもらうところからスタートできます。
+        いきなり全てをスマホアプリに切り替えるのではなく、事務所主導で無理なくデジタル化を進める前提です。
+      </div>
+    </section>
+
+    <!-- 会計事務所側のメリット -->
+    <section>
+      <h2>会計事務所側のメリット</h2>
+      <ul class="checklist">
+        <li>「月次を締めて終わり」から、「月次の前から数字を見て提案する」スタイルに変えやすい。</li>
+        <li>飲食クライアントに対して、「数字の見える化＋定期モニタリング」という形で顧問料オプションを設計しやすい。</li>
+        <li>証憑が月末に一気に届くのではなく、日々LINEで受け取ることで、処理の平準化がしやすい。</li>
+        <li>freeeが「とりあえず入っているだけ」の状態から、事務所側の業務と連動したインフラに変わる。</li>
+      </ul>
+    </section>
+
+    <!-- 顧問先オーナー側のメリット -->
+    <section>
+      <h2>顧問先オーナー側のメリット（伝えやすい言い方）</h2>
+      <ul class="checklist">
+        <li>レシートはファイルに綴じるのではなく、いつものLINEで送るだけ。</li>
+        <li>freeeに毎日ログインしたり、細かい仕訳を入力したりする必要はない。</li>
+        <li>「今月どうですか？」と聞かれたら、事務所から数字付きで答えてもらえる。</li>
+        <li>店舗が増えてきても、「どの店が良くて、どの店が危ないか」を事務所から教えてもらえる。</li>
+      </ul>
+    </section>
+
+    <!-- 外部パートナーの立ち位置 -->
+    <section>
+      <h2>freeeとKPIダッシュボードの設計・運用は外注可能</h2>
+      <p>
+        飲食に強い会計事務所でも、freee連携の初期設計や飲食向けKPIダッシュボードの構築までを所内だけでカバーするのは負担になりがちです。
+      </p>
+      <p>
+        本パッケージでは、freeeの初期設定〜飲食向けKPIダッシュボードの設計・テンプレート提供までを外部パートナーとしてサポートする形を想定しています。
+        事務所側は「顧問先との関係」と「数字をもとにした提案」に集中し、設定作業やテンプレートのチューニングは外部に任せる、という役割分担です。
+      </p>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="cta-block">
+      <h2>まずは、1〜2店舗の飲食クライアントから試してみませんか。</h2>
+      <p>既にfreeeをお使いの飲食クライアント、またはこれからfreee導入予定の先を対象に、事務所側モニタリングパッケージとして試していただけます。</p>
+      <div style="display:flex; flex-direction:column; gap:10px; max-width:420px; margin:0 auto;">
+        <button class="btn-primary">
+          飲食向けモニタリングパッケージの詳細資料をメールで受け取る
+        </button>
+        <button class="btn-secondary">
+          オンラインでの個別相談（30分）を予約する
+        </button>
+      </div>
+      <p style="font-size:11px; color:var(--muted); margin-top:10px;">
+        ※ボタンの遷移先（メールフォームやカレンダーなど）は、実際の運用に合わせて設定してください。
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section>
+      <h2>よくあるご質問</h2>
+
+      <div class="faq-item">
+        <div class="faq-q">Q. 顧問先側にfreeeの操作をどこまでお願いする想定ですか？</div>
+        <p>A. 基本的には「ログインできる状態にしておく」「必要に応じて事務所からの確認事項に答える」までです。日々の入力や設定は、事務所側＋外部パートナーが担当する想定です。</p>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q. freeeをまだ導入していない飲食クライアントにも使えますか？</div>
+        <p>A. はい。まずはfreee導入と口座連携を済ませたうえで、本パッケージを組み込む流れをご提案します。</p>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q. 電子帳簿保存法には対応できますか？</div>
+        <p>A. freee会計の「LINEレシート電子保存」機能を利用することで、顧問先がLINEから送ったレシート画像をfreee会計のファイルボックスに電子保存でき、電子帳簿保存法のスキャナ保存要件に沿った運用が可能です。詳細な運用ルールについては、貴事務所の方針や最新ガイドラインに沿って設計します。</p>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q. 今は紙の証憑をまとめて郵送してもらっています。そのままでも使えますか？</div>
+        <p>A. はい、すぐに「全部LINEにしてください」とお願いする必要はありません。これまで通り郵送を受けつつ、高額な仕入れや投資的な支出、家賃など、早めに把握したい証憑だけをLINEで送ってもらうところからスタートできます。そのうえでfreeeにデータを集約し、徐々に郵送分を減らしていく形で、無理なくデジタル化を進める前提です。</p>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q. KPIダッシュボードは、事務所側だけが見る前提ですか？</div>
+        <p>A. 基本は事務所側のモニタリング用ですが、必要に応じてオーナーと画面共有したり、定例ミーティングで一緒に数字を確認したりする運用も可能です。</p>
+      </div>
+    </section>
+
+    <!-- クロージング -->
+    <section class="closing">
+      飲食クライアントの数字管理がうまくいっていないのは、意識の問題ではなく、仕組みの問題であることがほとんどです。<br>
+      レシートはLINE、会計はfreee、設計と運用は会計事務所——という役割分担で、<br>
+      顧問先の数字を事務所側から見に行ける仕組みを、一緒につくっていきませんか。
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; 飲食クライアント×freee KPIモニタリングパッケージ
+  </footer>
+
+</div>
+</body>
+</html>
